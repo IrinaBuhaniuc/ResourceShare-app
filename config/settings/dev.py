@@ -2,8 +2,6 @@ from .base import *
 import environ
 
 
-SECRET_KEY = 'django-insecure-6s!ai&169@f7h8j3fddb-zu_%f5c*ip&53-mhgz22%j#@cz41%'
-
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1']

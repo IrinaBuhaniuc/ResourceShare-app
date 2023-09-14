@@ -25,5 +25,3 @@ urlpatterns = [
     path('', include('apps.user.urls'))
     
 ]
-# superuser_name = admin
-# superuser_password = adminpass1234

@@ -4,6 +4,7 @@ from django.views.generic import TemplateView
 from django.db.models import Count, Avg
 
 from .models import Resources, Category, Review, Rating
+from .form import PostResourceForm
 from apps.user.models import User
 from . import utils
 
@@ -93,7 +94,33 @@ def resource_detail_old(request, id):
     """
     return HttpResponse(response)
 
+def resource_post(request):
+    #breakpoint()
 
-
+    #Unbound -> user made a GET request
+    if request.method == 'GET':
+        form = PostResourceForm()
+        return render(
+                    request, 
+                    'resources/resource_post.html',
+                    {'form':form}
+                    )
+    else:
+    #Bound -> user made a POST request
+        form = PostResourceForm(request.POST)
+        #validation
+        #.is_valid() method
+        #.cleaned_data
+        
+        if form.is_valid():
+            data = form.cleaned_data
+            # TODO: manually add a user ID
+            # TODO: save it to the database
+            # TODO: Redirect the user to the homepage
+            data.save()
+        else:
+            pass
+ 
+    #return render(request, 'resources/post.html')
 class HomePage(TemplateView):
     template_name = 'home_page.html'
