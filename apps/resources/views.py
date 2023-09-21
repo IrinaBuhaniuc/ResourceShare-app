@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic import TemplateView
 from django.db.models import Count, Avg
+from django.contrib.auth.decorators import login_required
+
 
 from .models import Resources, Category, Review, Rating
 from .form import PostResourceForm
@@ -23,16 +25,38 @@ def home_page(request):
     
     return render(request=request,template_name='resources/home.html', context=context)
 
+@login_required
 def resource_detail(request,id):
+    max_viewed_resources = 5
+    viewed_resources = request.session.get('viewed_resources', [])
+    
+    
     res = (
         Resources.objects.select_related('user_id','cat_id')
         .prefetch_related('tag')
         .get(pk=id)
         )
+    
+    # prepare our data
+    viewed_resource = [id, res.title]
+    
+    # Check if that data exists already and remove it
+    if viewed_resource in viewed_resources:
+        viewed_resources.remove(viewed_resource)
+    
+    # Add it as first item
+    viewed_resources.insert(0, viewed_resource)
+    
+    # Get limit
+    viewed_resources = viewed_resources[:max_viewed_resources]
+    
+    # Add it back in the session
+    request.session['viewed_resources'] = viewed_resources
+    
     review = Review.objects.filter(resources_id_id=id)
     
     avg_rate = Rating.objects.filter(resources_id_id=res.id).aggregate(Avg('rate'))
-    #avarage = res.rating_set.aggregrate(Avg('rate'))
+    #average = res.rating_set.aggregate(Avg('rate'))
     
     context = {
         'res': res,
@@ -94,6 +118,8 @@ def resource_detail_old(request, id):
     """
     return HttpResponse(response)
 
+
+@login_required
 def resource_post(request):
     #breakpoint()
 
@@ -122,5 +148,7 @@ def resource_post(request):
             pass
  
     #return render(request, 'resources/post.html')
+
+
 class HomePage(TemplateView):
     template_name = 'home_page.html'

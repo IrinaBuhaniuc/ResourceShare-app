@@ -30,9 +30,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'apps.core.middleware.logging.simple_logging_middleware',
-    'apps.core.middleware.logging.ViewExecutionTimeMiddleware',
-    'apps.core.middleware.logging.ViewExecutionTime2Middleware'
+    'apps.core.middleware.log.simple_logging_middleware',
+    #'apps.core.middleware.logging.ViewExecutionTimeMiddleware',
+    #'apps.core.middleware.logging.ViewExecutionTime2Middleware'
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -97,4 +97,48 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'user.User'
 
+
+# what storage medium we use
 # SESSION_ENGINE = "django.contrib.sessions.backends.db"
+
+# Redirect the user to this url if user is not authenticated
+LOGIN_URL = 'login-view'
+
+# Logger configuration
+LOGGING = {
+    'version': 1, # dicConfig format version
+    'loggers': {
+        'logging_mw': {
+            # specify the logger instance
+            # decode which handler to handle it
+            'handlers':['file', 'console'], # the 'file' handler will handle.
+            'level': 'DEBUG'
+            }
+        },
+    'handlers':{
+        'console':{ # the name of the handler
+            'level': 'DEBUG', # handle this logging level and any other above it
+            'class': 'logging.StreamHandler', # this defines the medium to send the log messages
+            'filters':["only_if_debug_true"],
+            },
+        'file':{ # the name of the handler
+            'level': 'INFO', # handle this logging level and any other above it
+            'class': 'logging.FileHandler', # this defines the medium to send the log messages
+            'filename': str(BASE_DIR/'logs'/'req_res_logs.txt'),
+            'formatter': 'verbose'
+            }
+        },
+    'formatters': {
+        'verbose': { # the name of the formatter
+            # TODO: Search for more format log variables from the official doc
+            'format': '{levelname} {asctime} {module} :: {message}',
+            'style': '{', # I want to use curly braces to access attributes
+            }
+        },
+    'filters': {
+        'only_if_debug_true': {
+            "()":"django.utils.log.RequireDebugTrue",
+            },
+        # TODO: Call your own custom function to handle filtering
+        },
+}

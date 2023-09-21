@@ -1,10 +1,13 @@
 from django.conf import settings
 from django.utils import timezone
-
+from django.utils.deprecation import MiddlewareMixin
 from apps.core.logging import Logging
+import logging
 
+#logging = Logging(str(settings.BASE_DIR/'logs'/'req_res_logs.txt'))
 
-logging = Logging(str(settings.BASE_DIR/'logs'/'req_res_logs.txt'))
+logger = logging.getLogger('logging-old')
+
 
 def simple_logging_middleware(get_response):
     
@@ -63,7 +66,7 @@ class ViewExecutionTimeMiddleware:
         logging.warning(msg)
         return response
 
-from django.utils.deprecation import MiddlewareMixin   
+   
 class ViewExecutionTime2Middleware(MiddlewareMixin):
     def process_request(self, request):
         request.start_time = timezone.now()
