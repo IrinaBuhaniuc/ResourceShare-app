@@ -40,10 +40,6 @@ jobs:
           POSTGRES_DB: ${{ env.DB_NAME }}
         ports:
           - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval
-          --health-retries 4
 
     steps: # Actions
     - uses: actions/checkout@v3 # pre-build in Github
