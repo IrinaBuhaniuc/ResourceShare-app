@@ -1,8 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+
+from rest_framework.generics import UpdateAPIView
 from typing import Optional
 from .models import User
+from . import serializers
 
 # Create your views here.
 
@@ -57,6 +61,12 @@ def login_view(request):
     return render(request, 'user/login.html', context)
     
     
-    
+@login_required    
 def profile(request):
     return render(request, "user/profile.html")
+
+class UpdateUser(UpdateAPIView):
+    lookup_field = "id"
+    queryset = User.objects.all()
+    serializer_class = serializers.UserModelSerializer
+    

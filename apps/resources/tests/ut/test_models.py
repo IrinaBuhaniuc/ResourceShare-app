@@ -8,8 +8,6 @@ class TestTagModel(TestCase):
         self.tag_name = 'Python'
         self.tag = models.Tag(name=self.tag_name)
         
-        
-        
             
     # unit test 1# test_<logic-name>
     def test_create_tag_object_successful(self):

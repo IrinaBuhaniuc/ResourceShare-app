@@ -8,8 +8,12 @@ name: Django TesT
 on:
   push:
     branches: [ "dev" ]
-  pull_request:
+  pull_request_target: # To be able to access the secrets
     branches: [ "dev" ]
+    types: ['opened'] # run workflow only for opened pull requests
+    paths:  # run workflow only when .py files are modified
+      - "**.py"
+env: ${{ secrets }}
 
 jobs:
   build: # job id

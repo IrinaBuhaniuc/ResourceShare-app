@@ -18,7 +18,9 @@ CUSTOM_APPS =[
     'apps.resources',
     'apps.core'
 ]
-THIRD_PARTY_APPS = []
+THIRD_PARTY_APPS = [
+    'rest_framework',
+]
 
 INSTALLED_APPS = [*DEFAULT_APPS, *CUSTOM_APPS, *THIRD_PARTY_APPS]
 
@@ -54,6 +56,12 @@ TEMPLATES = [
         },
     },
 ]
+# REST_FRAMEWORK = {
+#     "DEFAULT_PERMISSION_CLASSES":[
+#         "rest"
+#     ]
+# }
+
 
 WSGI_APPLICATION = 'config.wsgi.application'
 

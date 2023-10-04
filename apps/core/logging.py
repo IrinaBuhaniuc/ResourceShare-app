@@ -21,11 +21,6 @@ class Logging(metaclass=MetaSingleton):
     def info(self,msg):
         self._write_log(LevelEnum.info, msg)
      
-            
-    # TODO: Add more levels specific methods
-    # - CRITICAL
-    # - ERROR
-    # - WARNING
        
     def critical(self,msg):
         self._write_log(LevelEnum.critical, msg)
